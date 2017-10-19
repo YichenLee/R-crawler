@@ -10,10 +10,10 @@ library(data.table)
 
 # 对爬取页数进行设定并创建数据框
 house_inf_0<-data.frame()
-
+url <- "http://cd.lianjia.com/ershoufang/pg"
 # 使用for循环进行批量数据爬取（发现url的规律，写for循环语句）
 for (i in 1:10){
-    web <- read_html(str_c("http://cd.lianjia.com/ershoufang/pg", i), encoding="UTF-8")
+    web <- read_html(str_c(url, i), encoding="UTF-8")
 
   # 用SelectorGadget定位节点信息并爬取房名
   house_name <- web%>%html_nodes(".houseInfo a")%>%html_text()
@@ -36,7 +36,7 @@ for (i in 1:10){
   house_inf_0<-rbind(house_inf_0, house)
 }
 # 删除中间数据
-rm(house, house_address, house_basic_inf, house_name, house_totalprice, house_unitprice,i, web)
+rm(url, house, house_address, house_basic_inf, house_name, house_totalprice, house_unitprice,i, web)
 
 # 整理数据，分割house_inf$house_basic_inf的有用信息
 house_inf_1 <- str_split_fixed(house_inf_0$house_basic_inf, "\\|", 8) %>% data.table()
@@ -62,3 +62,4 @@ rm(house_inf_0, house_inf_1, house_inf_2, house_inf_3)
 
 # 生成表格
 DT::datatable(house_inf)
+
